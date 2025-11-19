@@ -13,18 +13,36 @@ const accordionBtns = document.querySelectorAll(".accordion");
 
 accordionBtns.forEach((accordion) => {
   accordion.onclick = function () {
+    
+    // Check the current state of aria-expanded
+    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
     this.classList.toggle("is-open");
 
     let content = this.nextElementSibling;
     console.log(content);
 
-    if (content.style.maxHeight) {
+    if (isExpanded) {
       //this is if the accordion is open
+
+      //close accordion if opened
+      this.setAttribute('aria-expanded', 'false');
+
       content.style.maxHeight = null;
+
+      // WCAG Update: Hide content from screen readers
+      content.setAttribute('aria-hidden', 'true');
     } else {
       //if the accordion is currently closed
+
+      //open accordion if closed
+      this.setAttribute('aria-expanded', 'true');
+
       content.style.maxHeight = content.scrollHeight + "px";
       console.log(content.style.maxHeight);
+
+      // WCAG Update: Show content to screen readers
+      content.removeAttribute('aria-hidden');
     }
   };
 });
